@@ -1,11 +1,22 @@
 body {
-  padding: 50px;
+  padding: 30px;
 }
 
 .colorBlue {
   color:#0069d9;
 }
 
+a {
+  color:#0069d9;
+}
+
 .submitBtn {
-  margin-left: 10px;
+  margin-left: 25px;
+  height: 45px;
+  width: 100px;
+}
+
+.inputWidth {
+  min-width: 400px;
+  padding: 5px;
 }
