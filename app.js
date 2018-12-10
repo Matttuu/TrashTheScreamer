@@ -1,3 +1,21 @@
+const mongoose = require('mongoose');
+
+
+//connect to MongoDB
+mongoose.connect('mongodb://admin:test12345@ds129914.mlab.com:29914/skraldespand_db',{useNewUrlParser: true,});
+var db = mongoose.connection;
+
+//handle mongo error
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+  console.log('jeg er inde ???')
+  // we're connected!
+});
+
+
+
+
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
