@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 
 
 //connect to MongoDB
-mongoose.connect('mongodb://admin:test12345@ds129914.mlab.com:29914/skraldespand_db',{useNewUrlParser: true,});
+mongoose.connect('mongodb://admin:Ushulabubko645@ds129914.mlab.com:29914/skraldespand_db',{useNewUrlParser: true,});
 var db = mongoose.connection;
 
 //handle mongo error
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
-  console.log('jeg er inde ???')
+  console.log('jeg er inde')
   // we're connected!
 });
 
@@ -24,6 +24,8 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var lydRouter = require('./routes/lyd');
+
 
 var app = express();
 
@@ -39,6 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/lyd', lydRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
