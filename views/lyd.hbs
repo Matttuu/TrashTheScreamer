@@ -1,6 +1,6 @@
 <center>
-    <h1 class="loggedInHeading">Videoordbog</h1>
-    <p class="loggedInText">Her kan du optage video og tilføje til din ordbog. Efterfølgende kan du tilføje tekst til din video.</p>
+    <h1 class="loggedInHeading">Lyde</h1>
+    <p class="loggedInText">Her kan du optage lyde og tilføje til din skraldespand.</p>
 </center>
 
 <div class="container">
@@ -20,7 +20,7 @@
                 <audio controls>
                          <source src="lyd/audio/{{filename}}" type="audio/mp4">Din browser understøtter ikke denne filtype!</audio>
                 <form method="PUT" action="/lyd/audio/{{_id}}.mp4?_method=PUT"></form>
-                <form method="POST" action="/lyd/files/{{_id}}?_method=DELETE">
+                <form method="POST" action="/lyd/files/go/{{_id}}">
                     <button class="btn btn-danger btn-block mt-4">Slet lyd</button>
                 </form>
             </div>
