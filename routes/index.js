@@ -8,7 +8,6 @@ const multer = require('multer');
 const GridFsStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 
-
 // Mongo URI
 const mongoURI = 'mongodb://root:root1234@ds129914.mlab.com:29914/skraldespand_db';
 
@@ -45,7 +44,6 @@ const storage = new GridFsStorage({
 });
 const upload = multer({ storage });
 
-
 // @route GET /
 // @desc Loads form
 router.get('/', (req, res, audio) => {
@@ -59,8 +57,8 @@ router.get('/', (req, res, audio) => {
           file.contentType === 'audio/mp3' ||
           file.contentType === 'audio/mp4' ||
           file.contentType === 'audio/x-m4a'||
-          file.contentType === 'audio/m4a'
-          
+          file.contentType === 'audio/m4a' ||
+          file.contentType === 'audio/wav'
         ) {
           file.isAudio = true;
           audio = file.filename;          
@@ -72,20 +70,15 @@ router.get('/', (req, res, audio) => {
     }
   });
 });
-// Her lagres beskrivelse til billedet i databasen. 
-// Det bliver lagret til det specifikke filnavn.
-/* Der bliver benyttet en async / await funktion for at
-   sørge for koden bliver kørt asynkront. Dette resultere
-   i at teksten bliver opdateret når den bliver sat ind
-   med det samme.
-*/
+
+// Der bliver benyttet en async / await funktion for at sørge for koden bliver kørt asynkront.
 router.post('/files/:filename', (req, res, next) => {
 
   // Connect til database
   mongoose.connect('mongodb://root:root1234@ds129914.mlab.com:29914/skraldespand_db',{useNewUrlParser: true,}, function(err, db){
   if(err){throw err;}
 
-  // Oprette nyt promise som bliver kørt senere i koden.
+    // Oprette nyt promise som bliver kørt senere i koden.
     function resolveDetteBagefter() {
       return new Promise(resolve => {
         setTimeout(() => {
@@ -96,9 +89,9 @@ router.post('/files/:filename', (req, res, next) => {
     // Opretter async funktion 
     async function asyncCall () {
       var result = await resolveDetteBagefter();
-    // Peger på database collection 
+      // Peger på database collection 
       var collection = db.collection('audiouploads.files')
-    // Bruger collection.update metoden for at opdatere / give text til specifikt billede
+      // Bruger collection.update metoden for at opdatere / give tekst
       collection.updateOne(
       { filename: req.params.filename}, 
       { '$set': {'audio': req.body.audio}}  
@@ -106,14 +99,14 @@ router.post('/files/:filename', (req, res, next) => {
     }
   asyncCall();
  });
-}); 
+});
+
 // @route POST /upload
 // @desc  Uploads file to DB
 router.post('/audioupload', upload.single('file'), (req, res) => {
   // res.json({ file: req.file });
   res.redirect('/');
 }); 
-
 
 // @route GET /files
 // @desc  Display all files in JSON
@@ -125,7 +118,6 @@ router.get('/files', (req, res) => {
         err: 'No files exist'
       });
     }
-
     // Files exist
     return res.json(files);
   });
@@ -159,7 +151,7 @@ router.get('/audio/:filename', (req, res) => {
     }
 
     // Check if audio
-    if (file.contentType === 'audio/mp3' || file.contentType === 'audio/mp4' || file.contentType === 'audio/x-m4a' || file.contentType === 'audio/amr' || file.contentType === 'audio/m4a') {
+    if (file.contentType === 'audio/mp3' || file.contentType === 'audio/mp4' || file.contentType === 'audio/x-m4a' || file.contentType === 'audio/amr' || file.contentType === 'audio/m4a' || file.contentType === 'audio/wav') {
       // Read output to browser
       const readstream = gfs.createReadStream(file.filename);
       readstream.pipe(res);
@@ -173,20 +165,15 @@ router.get('/audio/:filename', (req, res) => {
 
 // @route DELETE /files/:id
 // @desc  Delete file
-
 router.post('/files/go/:id/', (req, res, next) => {
   gfs.remove({_id: req.params.id, root:'audiouploads'}, (err, gridStore) => {
     if (err) {
       return res.status(404).json({ err: err });
     }
-
     res.redirect('/');
   });
 });
 
-
 //Her slutter det nye
-
-module.exports = router;
 
 module.exports = router;
