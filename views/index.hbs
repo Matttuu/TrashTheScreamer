@@ -2,14 +2,19 @@
 <p>Her kan du tilføje lyde til databasen, justere generelle indstillinger og modificere den enkelte skraldespand.</p>
 <br>
 <h4 class="colorBlue">Upload lydfil til databasen</h4>
-<form action="/" class="md-form">
+
+<form action="/audioupload" method="POST" enctype="multipart/form-data" class="md-form">
     <div class="file-field">
         <div class="btn btn-primary btn-sm float-left">
-            <input class="inputWidth" type="file" name="sound" accept="audio/*">
+
+            <input type="file" accept="audio/*" id="capture" capture="audio" name="file" class="inputWidth">
         </div>
-        <input type="submit" class="btn btn-primary submitBtn">
     </div>
+    <input type="submit" value="Indsend" class="btn btn-primary submitBtn">
 </form>
+<hr>
+
+
 <br><br>
 <h4 class="colorBlue">Modificer en konkret skraldespand</h4>
 <div class="row">
@@ -27,10 +32,21 @@
     </div>
     <div class="col-8">
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="list-spand1" role="tabpanel" aria-labelledby="list-spand1-list">Info om skraldespand her</div>
-            <div class="tab-pane fade" id="list-spand2" role="tabpanel" aria-labelledby="list-spand2-list">Info om skraldespand her</div>
-            <div class="tab-pane fade" id="list-spand3" role="tabpanel" aria-labelledby="list-spand3-list">Info om skraldespand her</div>
-            <div class="tab-pane fade" id="list-spand4" role="tabpanel" aria-labelledby="list-spand4-list">Info om skraldespand her</div>
+            <div class="tab-pane fade show active" id="list-spand1" role="tabpanel" aria-labelledby="list-spand1-list">{{#if files}}
+{{#each files}}
+<div class="card card-body mb-3">
+    <audio controls>
+        <source src="audio/{{filename}}" type="audio/mp4">Din browser understøtter ikke denne filtype!</audio>
+    <form method="PUT" action="/audio/{{_id}}.mp4?_method=PUT"></form>
+    <form method="POST" action="/files/go/{{_id}}">
+        <button class="btn btn-danger btn-block mt-4">Slet lyd</button>
+    </form>
+</div>
+{{/each}}
+{{/if}}</div>
+            <div class="tab-pane fade" id="list-spand2" role="tabpanel" aria-labelledby="list-spand2-list">(Ikke aktiv)</div>
+            <div class="tab-pane fade" id="list-spand3" role="tabpanel" aria-labelledby="list-spand3-list">(Ikke aktiv)</div>
+            <div class="tab-pane fade" id="list-spand4" role="tabpanel" aria-labelledby="list-spand4-list">(Ikke aktiv)</div>
         </div>
     </div>
 </div>
