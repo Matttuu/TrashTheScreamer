@@ -69,7 +69,7 @@ router.get('/', (req, res, audio) => {
           file.isAudio = false;
         }
       });
-     res.render('lyd', {files: files, audio: 'lyd/Audio/' +audio});
+     res.render('lyd', {files: files, audio: 'lyd/audio/' +audio});
     }
   });
 });
@@ -175,8 +175,8 @@ router.get('/audio/:filename', (req, res) => {
 // @route DELETE /files/:id
 // @desc  Delete file
 
-router.delete('/files/:id', (req, res) => {
-  gfs.remove({ _id: req.params.id, root: 'audiouploads' }, (err, gridStore) => {
+router.post('/files/go/:id/', (req, res, next) => {
+  gfs.remove({_id: req.params.id, root:'audiouploads'}, (err, gridStore) => {
     if (err) {
       return res.status(404).json({ err: err });
     }
