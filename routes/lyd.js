@@ -11,7 +11,7 @@ const Grid = require('gridfs-stream');
 //Her er det nye
 
 // Mongo URI
-const mongoURI = 'mongodb://admin:Ushulabubko645@ds129914.mlab.com:29914/skraldespand_db';
+const mongoURI = 'mongodb://root:root1234@ds129914.mlab.com:29914/skraldespand_db';
 
 // Create mongo connection
 const conn = mongoose.createConnection(mongoURI, {useNewUrlParser: true});
@@ -83,14 +83,14 @@ router.get('/', (req, res, audio) => {
 router.post('/files/:filename', (req, res, next) => {
 
   // Connect til database
-  mongoose.connect('mongodb://admin:Ushulabubko645@ds129914.mlab.com:29914/skraldespand_db',{useNewUrlParser: true,}, function(err, db){
+  mongoose.connect('mongodb://root:root1234@ds129914.mlab.com:29914/skraldespand_db',{useNewUrlParser: true,}, function(err, db){
   if(err){throw err;}
 
   // Oprette nyt promise som bliver kørt senere i koden.
     function resolveDetteBagefter() {
       return new Promise(resolve => {
         setTimeout(() => {
-          resolve(res.redirect('/billedbog'));
+          resolve(res.redirect('/lyd'));
         }, 0001);
       });
     }
@@ -98,9 +98,9 @@ router.post('/files/:filename', (req, res, next) => {
     async function asyncCall () {
       var result = await resolveDetteBagefter();
     // Peger på database collection 
-      var collection = db.collection('uploads.files')
+      var collection = db.collection('audiouploads.files')
     // Bruger collection.update metoden for at opdatere / give text til specifikt billede
-      collection.update(
+      collection.updateOne(
       { filename: req.params.filename}, 
       { '$set': {'audio': req.body.audio}}  
       )
@@ -160,7 +160,7 @@ router.get('/audio/:filename', (req, res) => {
     }
 
     // Check if audio
-    if (file.contentType === 'audio/mp3' || file.contentType === 'audio/mp4' || file.contentType === 'audio/x-m4a' || file.contentType === 'audio/amr') {
+    if (file.contentType === 'audio/mp3' || file.contentType === 'audio/mp4' || file.contentType === 'audio/x-m4a' || file.contentType === 'audio/amr' || file.contentType === 'audio/m4a') {
       // Read output to browser
       const readstream = gfs.createReadStream(file.filename);
       readstream.pipe(res);

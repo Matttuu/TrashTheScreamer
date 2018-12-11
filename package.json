@@ -12,6 +12,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "grid": "^3.3.7",
+    "gridfs": "^1.0.0",
     "gridfs-stream": "^1.1.1",
     "hbs": "~4.0.1",
     "http-errors": "~1.6.2",
